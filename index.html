@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江旭 Asher · 影视导演 / AIGC 影像创作 · 作品集</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0B0B'/%3E%3Ctext x='16' y='22' font-size='15' text-anchor='middle' fill='%23F2F0EC' font-family='Georgia'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#0B0B0B;
+  --paper:rgba(255,255,255,.05);
+  --paper-solid:#151514;
+  --ink:#F2F0EC;
+  --ink-2:#8C8A84;
+  --line:#262624;
+  --line-2:#1D1D1B;
+  --accent:#D9534A;
+  --accent-soft:rgba(217,83,74,.14);
+  --shadow:0 24px 60px rgba(0,0,0,.5),0 8px 22px rgba(0,0,0,.35);
+  --shadow-soft:0 12px 32px rgba(0,0,0,.4);
+  --serif:"Noto Serif SC",Georgia,"Songti SC",serif;
+  --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+[contenteditable="true"]{outline:none;border-bottom:1px dashed transparent;transition:border-color .2s}
+[contenteditable="true"]:focus{border-bottom-color:#55534C}
+img{display:block}
+button{font-family:var(--sans)}
+input[type=file]{display:none}
+
+/* ===== 背景：半色调网点 + 光晕 ===== */
+.bg-deco{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.halftone{position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1.6px);
+  background-size:15px 15px;
+  -webkit-mask-image:radial-gradient(1100px 700px at 62% 28%,#000 15%,transparent 72%);
+  mask-image:radial-gradient(1100px 700px at 62% 28%,#000 15%,transparent 72%);
+}
+.halo{position:absolute;border-radius:50%;filter:blur(70px)}
+.halo.h1{width:520px;height:520px;background:rgba(255,255,255,.07);top:-160px;right:-120px}
+.halo.h2{width:420px;height:420px;background:rgba(217,83,74,.05);bottom:-180px;left:-140px}
+
+/* 涟漪层 */
+.ripple-layer{position:fixed;inset:0;z-index:60;pointer-events:none;overflow:hidden}
+.ripple{position:absolute;width:10px;height:10px;border:1px solid rgba(242,240,236,.5);border-radius:50%;
+  transform:translate(-50%,-50%);animation:ripple .8s cubic-bezier(.22,.8,.3,1) forwards}
+.ripple.small{width:5px;height:5px;border-color:rgba(242,240,236,.22)}
+@keyframes ripple{
+  0%{opacity:.55;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(14)}
+}
+
+/* ===== 导航 ===== */
+nav{position:sticky;top:0;z-index:50;background:rgba(11,11,11,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:20px 40px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+.nav-left{font-size:13px;letter-spacing:.25em;color:var(--ink-2)}
+.brand{font-family:var(--serif);font-size:16px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}
+.brand .dot{width:22px;height:22px;border:1px solid var(--ink-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--accent)}
+.nav-right{display:flex;justify-content:flex-end;gap:24px;font-size:12.5px;letter-spacing:.12em;color:var(--ink-2)}
+.nav-right .status{display:flex;align-items:center;gap:7px;color:var(--ink)}
+.nav-right .status i{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block}
+.nav-links{display:flex;gap:26px}
+.nav-links a{color:var(--ink-2);text-decoration:none;font-size:13px;letter-spacing:.05em;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+
+.wrap{position:relative;z-index:1}
+
+/* ===== Hero ===== */
+.hero{max-width:1280px;margin:0 auto;padding:70px 40px 0;min-height:78vh;display:flex;flex-direction:column}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:13px;color:var(--ink-2);background:var(--paper);backdrop-filter:blur(10px)}
+.hero-main{display:grid;grid-template-columns:360px 1fr;gap:60px;align-items:center;flex:1;padding:44px 0 48px}
+.hero-photo{justify-self:start}
+.avatar-box{width:360px;height:440px;border-radius:24px;border:1px solid var(--line);background:var(--paper);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;color:var(--ink-2);font-size:13px;transition:border-color .2s}
+.avatar-box:hover{border-color:var(--ink-2)}
+.avatar-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.avatar-box .hint{position:relative;z-index:1;text-align:center;line-height:1.7}
+.hero-info{display:flex;flex-direction:column;gap:28px}
+.hero-title{font-weight:900;letter-spacing:-.03em;line-height:.92;font-size:clamp(48px,7vw,104px);color:var(--ink);text-transform:uppercase;white-space:nowrap}
+.hero-title em{font-style:normal;color:transparent;-webkit-text-stroke:1px var(--ink)}
+.hero-info .intro{font-size:16px;color:var(--ink-2);max-width:540px;line-height:1.95}
+.contact-mini{display:flex;gap:40px;flex-wrap:wrap}
+.cm-row{display:flex;flex-direction:column;gap:7px}
+.cm-label{font-size:12px;letter-spacing:.18em;color:var(--ink-2)}
+.cm-value{font-size:15px;color:var(--ink)}
+.cta{justify-self:start;display:inline-flex;flex-direction:column;gap:8px;color:var(--ink);text-decoration:none;font-size:14px;letter-spacing:.08em;width:180px}
+.cta .row{display:flex;align-items:center;gap:10px}
+.cta svg{width:16px;height:16px}
+.cta .line{height:1px;background:var(--ink);width:100%;opacity:.5}
+
+/* ===== Section ===== */
+section{max-width:1280px;margin:0 auto;padding:70px 40px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:38px;gap:16px;flex-wrap:wrap}
+.sec-head h2{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:.03em}
+.sec-head .no{font-family:var(--serif);color:var(--ink-2);font-size:14px;letter-spacing:.22em}
+
+/* 关于 */
+.about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:52px}
+.about-text p{font-size:15.5px;line-height:2;color:#B9B7B0}
+.about-text p + p{margin-top:16px}
+.skill-col{display:flex;flex-direction:column;gap:24px}
+.skill-group .label{font-size:12px;letter-spacing:.2em;color:var(--ink-2);margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:9px}
+.tag{font-size:13px;color:var(--ink-2);border:1px solid var(--line);background:var(--paper);backdrop-filter:blur(8px);padding:7px 14px;border-radius:999px}
+.honors{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.honors li{list-style:none;font-size:14px;color:#B9B7B0;padding-left:18px;position:relative}
+.honors li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* 作品工具栏 */
+.works-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:30px}
+.cat-switch{display:flex;gap:4px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:4px;background:var(--paper)}
+.cat-switch button{border:0;background:transparent;font-size:13px;color:var(--ink-2);padding:8px 15px;border-radius:8px;cursor:pointer;transition:background .2s,color .2s}
+.cat-switch button.on{background:var(--ink);color:#0B0B0B}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);backdrop-filter:blur(10px);color:var(--ink);font-size:13px;padding:10px 16px;border-radius:11px;cursor:pointer;transition:border-color .2s,background .2s}
+.btn:hover{border-color:var(--ink-2)}
+.btn.primary{background:var(--ink);color:#0B0B0B;border-color:var(--ink)}
+.btn.primary:hover{background:#fff}
+.btn svg{width:15px;height:15px}
+
+/* 竖版网格 */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.card{background:var(--paper);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s}
+.card:hover{transform:translateY(-5px);box-shadow:var(--shadow-soft);border-color:#343430}
+.poster{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:linear-gradient(160deg,#22221F,#171715)}
+.poster img.cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.poster .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;color:#6E6C64;letter-spacing:.06em;padding:0 20px;text-align:center}
+.poster .idx{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.2em;color:#6E6C64;z-index:2}
+.poster .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(11,11,11,.42);opacity:0;transition:opacity .25s;color:#fff;font-size:13px;letter-spacing:.1em}
+.poster:hover .play{opacity:1}
+.poster .play svg{width:34px;height:34px}
+.card-body{padding:18px 20px 20px}
+.card-body .t{font-size:16px;letter-spacing:.02em}
+.card-body .role{margin-top:6px;font-size:12.5px;color:var(--ink-2)}
+.card-body .award{margin-top:10px;font-size:12.5px;color:#C98A84;line-height:1.7}
+.card-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);border:1px solid var(--line);background:var(--line-2);padding:7px 12px;border-radius:9px;cursor:pointer;transition:border-color .2s,color .2s}
+.chip:hover{border-color:var(--ink-2);color:var(--ink)}
+.chip.danger:hover{border-color:var(--accent);color:var(--accent)}
+.chip svg{width:13px;height:13px}
+
+/* 时间轴 */
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:grid;grid-template-columns:180px 1fr;gap:32px;padding:28px 0;border-top:1px solid var(--line)}
+.tl-item:last-child{border-bottom:1px solid var(--line)}
+.tl-time{font-size:13px;color:var(--ink-2);letter-spacing:.05em;padding-top:3px}
+.tl-main h3{font-family:var(--serif);font-size:19px;font-weight:600}
+.tl-main .org{font-size:14px;color:var(--accent);margin-top:4px}
+.tl-main p{margin-top:12px;font-size:14.5px;color:#B9B7B0;line-height:1.9}
+.tl-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* 弹窗 */
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.66);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:32px}
+.modal-mask.open{display:flex}
+.modal-panel{background:var(--paper-solid);border:1px solid var(--line);border-radius:24px;max-width:920px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow);animation:pop .3s cubic-bezier(.22,.8,.3,1)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-top{display:flex;align-items:center;justify-content:space-between;padding:22px 28px 0}
+.modal-top h3{font-family:var(--serif);font-size:24px;font-weight:600}
+.modal-close{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--line-2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);transition:border-color .2s}
+.modal-close:hover{border-color:var(--ink-2)}
+.modal-close svg{width:16px;height:16px}
+.modal-video{margin:20px 28px 0;aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden;position:relative}
+.modal-video video{width:100%;height:100%;object-fit:contain;display:block}
+.modal-video .vph{position:absolute;inset:0;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;color:#8C8A84;font-size:13px}
+.modal-video .vph svg{width:40px;height:40px;color:#55534C}
+.modal-info{padding:24px 28px 30px;display:flex;flex-direction:column;gap:16px}
+.modal-meta{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--ink-2)}
+.modal-desc{font-size:15px;line-height:1.95;color:#B9B7B0;min-height:50px}
+.modal-award{font-size:13.5px;color:#C98A84;line-height:1.8;border-left:2px solid var(--accent-soft);padding-left:16px}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+.toast{position:fixed;bottom:36px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:#0B0B0B;font-size:13px;padding:11px 20px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{max-width:1280px;margin:0 auto;padding:30px 40px 50px;color:var(--ink-2);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+
+@media (max-width:960px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .hero-main{grid-template-columns:1fr;gap:32px}
+  .cta{justify-self:start}
+  .nav-right{display:none}
+}
+@media (max-width:620px){
+  .grid{grid-template-columns:1fr}
+  .tl-item{grid-template-columns:1fr;gap:8px}
+  .nav-inner{grid-template-columns:1fr auto}
+  .hero-title{white-space:normal}
+  .avatar-box{width:100%;height:340px}
+  .modal-mask{padding:14px}
+}
+/* ===== 静态发布版：隐藏所有编辑/上传入口，仅保留展示 ===== */
+.card-actions,.modal-actions,#addWorkBtn{display:none!important}
+.avatar-box{cursor:default;pointer-events:none}
+.hero-title{line-height:1.05}
+</style>
+</head>
+<body>
+
+<div class="bg-deco">
+  <div class="halftone"></div>
+  <div class="halo h1"></div>
+  <div class="halo h2"></div>
+</div>
+<div class="ripple-layer" id="rippleLayer"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-left">JX</div>
+    <div class="brand"><span class="dot">J</span><span contenteditable="true" data-key="brand-name">江旭 ASHER</span></div>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#experience">经历</a>
+        <a href="#about">关于</a>
+        <a href="#works">作品</a>
+        <a href="#top">联系</a>
+      </div>
+      <span>2026</span>
+      <span class="status"><i></i>AVAILABLE</span>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <header class="hero" id="top">
+    <div class="hero-top">
+      <div class="pill" contenteditable="true" data-key="role-tag">影视导演 / 叙事短片 / AI 协作</div>
+    </div>
+    <div class="hero-main">
+      <div class="hero-photo">
+        <div class="avatar-box" id="avatarBox" title="上传个人照片">
+          <img id="avatarImg" alt="" style="display:none">
+          <span class="hint" id="avatarHint">上传<br>个人照片</span>
+        </div>
+      </div>
+      <div class="hero-info">
+        <h1 class="hero-title">Port<em>folio</em></h1>
+        <p class="intro" contenteditable="true" data-key="hero-intro">把想法转化为清晰、鲜活且有记忆点的影像作品。从创意策划、分镜脚本到 AI 素材迭代与成片输出，独立完成全流程。</p>
+        <div class="contact-mini">
+          <div class="cm-row"><span class="cm-label">城市</span><span class="cm-value" contenteditable="true" data-key="contact-city">广东 · 中山</span></div>
+          <div class="cm-row"><span class="cm-label">邮箱</span><span class="cm-value" contenteditable="true" data-key="contact-email">请填写联系邮箱</span></div>
+          <div class="cm-row"><span class="cm-label">微信 / 电话</span><span class="cm-value" contenteditable="true" data-key="contact-phone">请填写联系方式</span></div>
+        </div>
+        <a class="cta" href="#works">
+          <span class="row">浏览作品 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+          <span class="line"></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 经历 -->
+  <section id="experience">
+    <div class="sec-head"><h2>工作与教育经历</h2><span class="no">01 / EXPERIENCE</span></div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">2026.01 – 2026.10</div>
+        <div class="tl-main">
+          <h3>影视导演</h3>
+          <div class="org">中山星火时代科技有限公司</div>
+          <p contenteditable="true" data-key="exp-1">负责前期策划与脚本创作、AI 素材生成与迭代调试、镜头把控与素材筛选；对接 PR、AE、PS 完成修复、抠图、调色、特效包装与成片剪辑；统筹项目文件归档、版本管理与效果复盘，测试新模型与工作流并沉淀提示词库。</p>
+          <div class="tl-tags tags"><span class="tag">策划脚本</span><span class="tag">AI 素材迭代</span><span class="tag">镜头把控</span><span class="tag">后期合成</span><span class="tag">项目统筹</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">2025.01 – 2025.06</div>
+        <div class="tl-main">
+          <h3>编导策划</h3>
+          <div class="org">湖南海风传媒有限公司</div>
+          <p contenteditable="true" data-key="exp-2">前期梳理剧本并标注重点，对接编剧、美术部门落实导演需求，制定拍摄日程，确认演员档期、场地与设备；现场记录导演反馈并传达各团队，跟踪镜头状态、协调表演细节、把控拍摄进度；后期整理拍摄记录并对接剪辑方向、归档资料。</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">2022 – 2025</div>
+        <div class="tl-main">
+          <h3>数字媒体艺术设计 · 大专</h3>
+          <div class="org">湖南工艺美术职业学院</div>
+          <p contenteditable="true" data-key="exp-3">主修摄影摄像基础、设计创意、三维动画设计与制作、分镜头脚本设计、数字图像处理；专业排名前 3%，获国家励志奖学金、院级奖学金、校优秀毕业生、三好学生与优秀班干部。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于 -->
+  <section id="about">
+    <div class="sec-head"><h2>个人优势</h2><span class="no">02 / ABOUT</span></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p contenteditable="true" data-key="about-p1">传统影视出身转型 AI 影像创作，具备完整的导演思维，熟练掌握分镜、运镜、景别、镜头调度等影视核心创作能力。同时对 AIGC 充满热情，学习适应速度快，善于利用 AI 工具突破创作边界，将脑海中的创意与奇幻构想落地成影像。熟悉国内主流 AIGC 视频、生图工具，同时熟练使用海外各类生成模型，能够独立完成从前期策划、视觉设定到成片输出的全流程制作；拥有多部短片、广告、动漫 MV 及长篇影像项目经验，擅长把控画面风格统一，解决 AI 影像常见的稳定性、连贯性问题。</p>
+      </div>
+      <div class="skill-col">
+        <div class="skill-group">
+          <div class="label">影视后期工具</div>
+          <div class="tags">
+            <span class="tag">剪映</span><span class="tag">Photoshop</span><span class="tag">After Effects</span><span class="tag">Premiere Pro</span><span class="tag">Illustrator</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="label">AI 生成工具</div>
+          <div class="tags">
+            <span class="tag">即梦</span><span class="tag">海螺 AI</span><span class="tag">可灵 AI</span><span class="tag">GPT</span><span class="tag">Nano Banana</span><span class="tag">Midjourney</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="label">荣誉奖项</div>
+          <ul class="honors">
+            <li>WAIFF 第二届世界人工智能电影节 · 海螺 AI 最佳先锋实践奖 · 戛纳主会场参赛资格</li>
+            <li>国家励志奖学金 · 院级奖学金</li>
+            <li>校优秀毕业生 · 三好学生 · 优秀班干部</li>
+            <li>班级学习委员 · 专业排名前 3%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 作品 -->
+  <section id="works">
+    <div class="sec-head"><h2>作品展示</h2><span class="no">03 / WORKS</span></div>
+    <div class="works-toolbar">
+      <div class="cat-switch" id="catSwitch">
+        <button class="on" data-cat="all">全部</button>
+        <button data-cat="live-action">实拍</button>
+        <button data-cat="ai-film">AI 电影 / 短片</button>
+        <button data-cat="ai-animation">AI 动画</button>
+      </div>
+      <button class="btn primary" id="addWorkBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        添加新作品
+      </button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+</div>
+
+<footer>
+  <span>© 2026 江旭 Asher · AIGC Filmmaker</span>
+  <span>作品与资料仅供作品集展示</span>
+</footer>
+
+<!-- 弹窗 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal-panel" role="dialog" aria-modal="true">
+    <div class="modal-top">
+      <h3 id="modalTitle"></h3>
+      <button class="modal-close" id="modalClose" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="modal-video" id="modalVideo">
+      <div class="vph" id="videoPlaceholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z" fill="currentColor" stroke="none"/></svg>
+        <span>暂无预览视频</span>
+        <span style="font-size:11px;color:#55534C">在下方上传本地视频后即可播放</span>
+      </div>
+    </div>
+    <div class="modal-info">
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-desc" contenteditable="true" id="modalDesc"></div>
+      <div class="modal-award" id="modalAward"></div>
+      <a class="btn" id="modalExtLink" target="_blank" rel="noopener noreferrer" style="display:none;text-decoration:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4h6v6M20 4l-9 9M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg>
+        在外部平台观看
+      </a>
+      <div class="modal-actions">
+        <button class="btn" id="modalUploadVideo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16"/></svg>
+          上传视频
+        </button>
+        <button class="btn" id="modalUploadCover">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>
+          更换封面
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="coverInput" accept="image/*">
+<input type="file" id="videoInput" accept="video/*">
+<input type="file" id="avatarInput" accept="image/*">
+
+<script>
+"use strict";
+
+/* ===== 作品数据 ===== */
+let WORKS = [
+  {id:1,title:"容错率",role:"编导 / AIGC 全流程创作",year:"2026",ratio:"3:4",cat:"ai-film",
+   desc:"一部探讨人与生成式 AI 边界的科幻短片，以“容错”作为核心命题，思辨技术幻觉、人的主体性与创作的真实内核。从剧本、分镜、视觉美术、动态渲染到剪辑调色独立完成，尝试用影像表达 AI 时代创作者的困境与自我锚定。",
+   award:"第二届世界人工智能电影节 WAIFF｜海螺 AI 最佳先锋实践奖，戛纳主会场展映候选；本届收到全球近 2000 部参赛作品，仅 25 部获评，入围获奖率约 1.25%。",
+   cover:"",video:"",url:""},
+  {id:2,title:"石头落水四次",role:"导演 · 策划 · 分镜 · 剪辑 · 摄像",year:"2024",ratio:"3:4",cat:"live-action",
+   desc:"探讨“暴力”主题，旨在引起社会对弱势群体的关注。负责整体视觉叙事构建，保证故事情节流畅与视觉效果吸引力，协调团队资源、优化拍摄流程，最终完成这部微电影。",
+   award:"精选为 B 站“2025 届毕业晚会”优秀毕设；入围小红书“五分钟田野”活动名单（前 2%）。",
+   cover:"",video:""},
+  {id:3,title:"20 岁越过了那座山",role:"导演 · 策划 · 剪辑 · 摄像",year:"2024",ratio:"3:4",cat:"live-action",
+   desc:"以旅途中的突发感想为基础创作，利用当下新颖技法较为创意地表达事件与思想，制作全程由一人完成。",
+   award:"获 2024（秋期）“国青杯”全国高校艺术设计作品展评学生组三等奖。",
+   cover:"",video:""},
+  {id:4,title:"从书信中走出来的清溪",role:"导演 · 策划 · 分镜 · 剪辑",year:"2024",ratio:"3:4",cat:"live-action",
+   desc:"周立波故居宣传片，讲述周立波在清溪村的生平故事，宣传周立波精神，促进乡村文化经济发展。",
+   award:"2024 年教育部职业院校艺术设计类专业教指委全国优秀作品展暨产教融合成果转化对接会优秀作品大赛 · 数字设计类三等奖。",
+   cover:"",video:""},
+  {id:5,title:"狩猎",role:"导演 · 策划 · 分镜 · 剪辑",year:"2022",ratio:"3:4",cat:"live-action",
+   desc:"大一时期的第一部作品，围绕“男生安全”主题展开，呼吁社会关注相关议题。",
+   award:"2022 年于 B 站发布，播放量 10w+。",
+   cover:"",video:""}
+];
+
+let current = 0;
+let uid = 6;
+
+const $ = id=>document.getElementById(id);
+const grid=$("grid"), modalMask=$("modalMask"), rippleLayer=$("rippleLayer");
+
+function toast(msg){
+  const t=$("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+/* ===== 水涟漪 + 柔和水滴声（低音量、低频、无尖锐高频） ===== */
+let audioCtx=null;
+function playDrop(){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended")audioCtx.resume();
+    const t=audioCtx.currentTime;
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.type="sine";
+    o.frequency.setValueAtTime(360,t);
+    o.frequency.exponentialRampToValueAtTime(130,t+0.16);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.05,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start(t);o.stop(t+0.34);
+  }catch(_){}
+}
+function spawnRipple(x,y,small){
+  const r=document.createElement("span");
+  r.className="ripple"+(small?" small":"");
+  r.style.left=x+"px";r.style.top=y+"px";
+  rippleLayer.appendChild(r);
+  setTimeout(()=>r.remove(),900);
+}
+let lastMove=0;
+document.addEventListener("pointerdown",e=>{
+  spawnRipple(e.clientX,e.clientY,false);
+  playDrop();
+});
+document.addEventListener("pointermove",e=>{
+  const now=Date.now();
+  if(now-lastMove>160){lastMove=now;spawnRipple(e.clientX,e.clientY,true);}
+});
+
+/* ===== 类别筛选 + 渲染网格 ===== */
+let filter="all";
+const CAT_LABEL={"live-action":"实拍","ai-film":"AI 电影 / 短片","ai-animation":"AI 动画"};
+
+function renderGrid(){
+  grid.className="grid";
+  grid.innerHTML="";
+  const list=WORKS.map((w,idx)=>({w,idx})).filter(({w})=>filter==="all"||w.cat===filter);
+  if(!list.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--ink-2);padding:60px 0;font-size:14px">该类别暂无作品</div>`;
+    return;
+  }
+  list.forEach(({w,i})=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const coverSrc=w.cover||`assets/covers/${w.id}.jpg`;
+    const cover=`<span class="ph" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">${w.title}</span><img class="cover" src="${coverSrc}" alt="${w.title}" onerror="this.remove()">`;
+    card.innerHTML=`
+      <div class="poster" data-act="open">
+        ${cover}
+        <span class="idx">${String(i+1).padStart(2,"0")}</span>
+        <div class="play">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+          播放作品
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="t">${w.title}</div>
+        <div class="role">${CAT_LABEL[w.cat]||""} · ${w.role} · ${w.year}</div>
+        ${w.award?`<div class="award">${w.award}</div>`:""}
+        <div class="card-actions">
+          <button class="chip" data-act="cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg>
+            上传封面
+          </button>
+          <button class="chip" data-act="video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="13" height="14" rx="3"/><path d="M16 10l5-3v10l-5-3"/></svg>
+            上传视频
+          </button>
+          <button class="chip" data-act="link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4h6v6M20 4l-9 9M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg>
+            ${w.url?"改外链":"加外链"}
+          </button>
+          <button class="chip danger" data-act="del">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>
+            删除
+          </button>
+        </div>
+      </div>`;
+    card.querySelector('[data-act="open"]').addEventListener("click",()=>openModal(i));
+    card.querySelector('[data-act="cover"]').addEventListener("click",e=>{e.stopPropagation();pending=i;$("coverInput").click();});
+    card.querySelector('[data-act="video"]').addEventListener("click",e=>{e.stopPropagation();current=i;$("videoInput").click();});
+    card.querySelector('[data-act="link"]').addEventListener("click",e=>{
+      e.stopPropagation();
+      const cur=WORKS[i].url||"";
+      const input=prompt("粘贴外部平台视频链接（B 站 / YouTube / 小红书 / 视频号）：\n留空则清除外链",cur);
+      if(input===null)return;
+      const cleaned=cleanUrl(input);
+      if(input.trim()&&!cleaned){toast("链接格式不对，请检查后重填");return;}
+      WORKS[i].url=cleaned||"";renderGrid();toast(cleaned?"外链已保存，弹窗里可点击观看":"外链已清除");
+    });
+    card.querySelector('[data-act="del"]').addEventListener("click",e=>{e.stopPropagation();deleteWork(i);});
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll("#catSwitch button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#catSwitch button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");filter=b.dataset.cat;renderGrid();
+  });
+});
+
+/* ===== 弹窗 ===== */
+/* 外链清洗：去空格、从分享文案里抽网址、补 https://、校验合法性 */
+function cleanUrl(raw){
+  if(!raw)return null;
+  let s=String(raw).trim();
+  const m=s.match(/https?:\/\/[^\s\u4e00-\u9fa5<>"']+/i);
+  if(m)s=m[0];
+  if(!/^https?:\/\//i.test(s)){
+    if(/^[\w.-]+\.[a-z]{2,}/i.test(s))s="https://"+s;
+    else return null;
+  }
+  try{const u=new URL(s);if(!u.hostname.includes("."))return null;return u.href;}catch(_){return null;}
+}
+function openModal(i){
+  current=i;const w=WORKS[i];
+  $("modalTitle").textContent=w.title;
+  $("modalMeta").innerHTML=`<span>${CAT_LABEL[w.cat]||""}</span><span>${w.role}</span><span>${w.year}</span><span>${w.ratio}</span>`;
+  $("modalDesc").textContent=w.desc;
+  $("modalAward").textContent=w.award||"";
+  $("modalAward").style.display=w.award?"block":"none";
+  const ext=$("modalExtLink"),u=cleanUrl(w.url);
+  if(u){ext.href=u;ext.style.display="inline-flex";}else{ext.removeAttribute("href");ext.style.display="none";}
+  renderVideo(w);
+  modalMask.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function renderVideo(w){
+  const box=$("modalVideo");
+  const old=box.querySelector("video");if(old)old.remove();
+  $("videoPlaceholder").style.display=w.video?"none":"flex";
+  if(w.video){
+    const v=document.createElement("video");
+    v.src=w.video;v.controls=true;v.playsInline=true;v.preload="metadata";
+    box.appendChild(v);
+  }
+}
+function closeModal(){
+  const v=$("modalVideo").querySelector("video");
+  if(v)v.pause();
+  modalMask.classList.remove("open");
+  document.body.style.overflow="";
+}
+$("modalClose").addEventListener("click",closeModal);
+modalMask.addEventListener("click",e=>{if(e.target===modalMask)closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modalMask.classList.contains("open"))closeModal();});
+
+/* ===== 增删 ===== */
+function addWork(){
+  WORKS.push({id:uid++,title:"未命名作品",role:"导演 · 策划",year:"2026",ratio:"3:4",cat:"live-action",desc:"",award:"",cover:"",video:""});
+  renderGrid();toast("已添加新作品，可上传封面与视频");
+}
+function deleteWork(i){
+  if(!confirm("确定删除这部作品吗？"))return;
+  WORKS.splice(i,1);renderGrid();toast("作品已删除");
+}
+$("addWorkBtn").addEventListener("click",addWork);
+
+
+/* ===== 上传 ===== */
+let pending=null;
+const coverInput=$("coverInput"),videoInput=$("videoInput"),avatarInput=$("avatarInput");
+
+coverInput.addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{WORKS[pending].cover=ev.target.result;renderGrid();
+    if(modalMask.classList.contains("open"))renderVideo(WORKS[current]);toast("封面已更新");};
+  reader.readAsDataURL(file);coverInput.value="";
+});
+videoInput.addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  WORKS[current].video=URL.createObjectURL(file);
+  if(modalMask.classList.contains("open"))renderVideo(WORKS[current]);else openModal(current);
+  toast("视频已载入，可点击播放");videoInput.value="";
+});
+$("modalUploadVideo").addEventListener("click",()=>videoInput.click());
+$("modalUploadCover").addEventListener("click",()=>{pending=current;coverInput.click();});
+
+$("avatarBox").addEventListener("click",()=>avatarInput.click());
+avatarInput.addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=$("avatarImg");img.src=ev.target.result;img.style.display="block";
+    $("avatarHint").style.display="none";toast("头像已更新");
+  };
+  reader.readAsDataURL(file);avatarInput.value="";
+});
+
+/* ===== 文案本地持久化（按 data-key 存取，避免结构调整后写串） ===== */
+const TEXT_KEY="asher-portfolio-text-v2";
+function saveText(){
+  const data={};
+  document.querySelectorAll("[contenteditable='true'][data-key]").forEach(el=>{data[el.dataset.key]=el.textContent;});
+  try{localStorage.setItem(TEXT_KEY,JSON.stringify(data));}catch(_){}
+}
+function loadText(){
+  try{
+    localStorage.removeItem("asher-portfolio-text");
+    const raw=localStorage.getItem(TEXT_KEY);if(!raw)return;
+    const data=JSON.parse(raw);
+    document.querySelectorAll("[contenteditable='true'][data-key]").forEach(el=>{
+      if(data[el.dataset.key]!==undefined)el.textContent=data[el.dataset.key];
+    });
+  }catch(_){}
+}
+document.addEventListener("input",saveText);
+
+loadText();
+renderGrid();
+</script>
+</body>
+</html>
